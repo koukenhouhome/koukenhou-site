@@ -1,0 +1,40 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  work: CollectionEntry<'works'>;
+}
+
+const { work } = Astro.props;
+const statusLabel = {
+  planned: '计划中',
+  'in-development': '开发中',
+  released: '已发布',
+} as const;
+---
+
+<article class="card">
+  <h3><a href={`/${work.id}/`}>{work.data.title}</a></h3>
+  <p>{work.data.tagline}</p>
+  <p class="meta muted">
+    {statusLabel[work.data.status]} · {work.data.platforms.join(' / ')}
+  </p>
+</article>
+
+<style>
+  .card {
+    padding: 1rem 1.25rem;
+    border: 1px solid var(--border);
+    border-radius: 0.5rem;
+    background: var(--card);
+  }
+  h3 {
+    margin: 0 0 0.25rem;
+  }
+  p {
+    margin: 0.25rem 0;
+  }
+  .meta {
+    font-size: 0.875rem;
+  }
+</style>
