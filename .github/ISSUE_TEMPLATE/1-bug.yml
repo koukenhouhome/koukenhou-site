@@ -1,4 +1,4 @@
-name: 缺陷
+name: 缺陷报告
 description: 网站的显示或行为与预期不符
 title: '【缺陷】范围：'
 labels: ['type:bug']

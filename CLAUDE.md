@@ -34,4 +34,5 @@ npm run build && npx wrangler dev   # 用和线上相同的 Workers 运行时预
 - Astro 7：`z` 从 `astro/zod` 导入（`astro:content` 里的 `z` 已弃用）；内容集合定义在 `src/content.config.ts`，使用 `glob` 加载器。
 - `wrangler` 在 `package.json` 里固定了版本，Workers Builds 会使用这个版本；升级时改版本号并走 PR。
 - `wrangler.jsonc` 的 `compatibility_date` 不要随意改动，需要新的运行时行为时再更新。
+- GitHub Issue 表单的 `name` 至少 3 个字符，否则整个表单无效、不会显示（YAML 语法检查发现不了）。表单和 PR 模板只在 `main` 上生效，合并后要打开 New issue 页面确认。
 - Claude 桌面应用启动的进程，PATH 可能缺少 fnm 的 Node；运行 npm 前先确认 `node --version` 可用。
