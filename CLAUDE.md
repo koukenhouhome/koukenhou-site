@@ -7,7 +7,8 @@
 ## 架构
 
 - Astro 静态网站，`npm run build` 输出 `dist/`；不使用服务端渲染（SSR）、适配器或数据库，需要的话先和用户讨论。
-- 托管在 Cloudflare Pages，通过 Git 集成自动部署：`main` → 生产环境，PR → 预览地址。本仓库不保存任何 Cloudflare 令牌。
+- 托管在 Cloudflare Workers 的静态资源（Static Assets），配置在 `wrangler.jsonc`（只托管 `dist/`，没有 Worker 脚本）。不使用旧版 Pages。
+- 部署由 Cloudflare 的 Git 集成（Workers Builds）完成：`main` → 生产环境，其他分支和 PR → 预览地址。构建命令 `npm run build`、部署命令 `npx wrangler deploy` 在 Cloudflare 控制台里设置。本仓库不保存任何 Cloudflare 令牌。
 - `.github/workflows/check.yml` 只做检查（`npm run verify`），不负责部署。
 - 作品内容放在 `src/content/works/*.md`，字段由 `src/content.config.ts` 校验；页面在 `src/pages/`，共用布局在 `src/layouts/BaseLayout.astro`。
 - 界面语言为简体中文（`lang="zh-CN"`）。多语言以后再考虑。
@@ -17,6 +18,7 @@
 ```bash
 npm run dev       # 本地预览（Claude 用 `npx astro dev --background` 在后台启动）
 npm run verify    # 完成任何改动前都要通过：astro check + 构建
+npm run build && npx wrangler dev   # 用和线上相同的 Workers 运行时预览 dist/
 ```
 
 ## 规则
@@ -30,4 +32,6 @@ npm run verify    # 完成任何改动前都要通过：astro check + 构建
 ## 已知的坑
 
 - Astro 7：`z` 从 `astro/zod` 导入（`astro:content` 里的 `z` 已弃用）；内容集合定义在 `src/content.config.ts`，使用 `glob` 加载器。
+- `wrangler` 在 `package.json` 里固定了版本，Workers Builds 会使用这个版本；升级时改版本号并走 PR。
+- `wrangler.jsonc` 的 `compatibility_date` 不要随意改动，需要新的运行时行为时再更新。
 - Claude 桌面应用启动的进程，PATH 可能缺少 fnm 的 Node；运行 npm 前先确认 `node --version` 可用。
