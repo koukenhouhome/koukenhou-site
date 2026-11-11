@@ -22,7 +22,9 @@ Closes #
 
 <!-- 在 Cloudflare 预览地址上验收，全部勾选后再合并。没有页面或行为变化时写“无（原因）”。 -->
 
-- [ ] 准备：本 PR 里 Cloudflare 的构建检查已成功，且对应最新提交；打开它给出的预览地址
+预览地址：<!-- 分支名里的 / 换成 -，再接 -koukenhou-site.koukenhou-hjf.workers.dev；以 Cloudflare 构建日志里 "Preview URL:" 一行为准 -->
+
+- [ ] 准备：本 PR 里 Cloudflare 的构建检查（`Workers Builds: koukenhou-site`）已成功，且对应最新提交；打开上面的预览地址
 - [ ] 逐页检查：`/`、`/about/`、`/wakarito/` 正常显示；随便输入一个不存在的路径，显示“页面不存在”
 - [ ] 手机宽度：用手机打开，或在浏览器开发者工具里切到约 375px 宽，没有横向滚动条、文字没有被截断
 - [ ] 操作 1：…… → 预期：……
