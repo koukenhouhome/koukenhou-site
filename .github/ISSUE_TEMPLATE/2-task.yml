@@ -1,0 +1,49 @@
+name: 功能或任务
+description: 新页面、内容更新、文档、维护（依赖、构建、CI、部署）
+title: '【类型】范围：'
+body:
+  - type: markdown
+    attributes:
+      value: |
+        标题格式：`【功能】`、`【内容】`、`【文档】`或`【维护】`开头，再写`范围：详细描述`。
+        提交后请添加与“类型”对应的标签：功能、内容 `type:feature`，文档 `type:docs`，维护 `type:chore`（Claude 创建时会自动添加）。
+  - type: dropdown
+    id: kind
+    attributes:
+      label: 类型
+      options:
+        - 功能（新页面、新组件、交互）
+        - 内容（自我介绍、作品介绍等文字和图片）
+        - 文档（README、CLAUDE.md 等仓库文档）
+        - 维护（依赖、构建、CI、部署）
+    validations:
+      required: true
+  - type: textarea
+    id: background
+    attributes:
+      label: 背景与目标
+      description: 为什么要做、做完后有什么改善。
+    validations:
+      required: true
+  - type: textarea
+    id: approach
+    attributes:
+      label: 做法
+      description: 计划怎么做；有多个可选做法时列出业界常规做法和推荐，并说明理由。
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: 验收标准
+      description: 做到什么程度算完成；PR 的用户验收清单从这里生成。
+      value: |
+        - [ ]
+    validations:
+      required: true
+  - type: textarea
+    id: out-of-scope
+    attributes:
+      label: 范围外
+      description: 这次明确不做的事。
+      value: 无（原因）
