@@ -10,8 +10,10 @@ if (!work) {
 const { Content } = await render(work);
 ---
 
-<BaseLayout title={work.data.title} description={work.data.tagline}>
+<BaseLayout title={work.data.title} description={work.data.tagline} section="works">
   <h1>{work.data.title}</h1>
   <p class="muted">{work.data.tagline}</p>
-  <Content />
+  <div class="prose">
+    <Content />
+  </div>
 </BaseLayout>
