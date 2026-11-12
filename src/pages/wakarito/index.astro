@@ -1,6 +1,7 @@
 ---
 import { getEntry, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import WorkLinks from '../../components/WorkLinks.astro';
 
 // Fail the build instead of publishing an empty page if the entry is missing.
 const work = await getEntry('works', 'wakarito');
@@ -13,6 +14,7 @@ const { Content } = await render(work);
 <BaseLayout title={work.data.title} description={work.data.tagline} section="works">
   <h1>{work.data.title}</h1>
   <p class="muted">{work.data.tagline}</p>
+  <WorkLinks links={work.data.links} />
   <div class="prose">
     <Content />
   </div>
