@@ -1,9 +1,11 @@
 ---
 title: AIF-C01 学习网站
 tagline: AWS Certified AI Practitioner 考试的在线学习与练习（日语界面）
-status: in-development
+status: released
 platforms: ['Web']
 order: 2
+links:
+  site: https://aif.koukenhou.com/
 ---
 
 为准备 AWS 认证考试 AIF-C01（AWS Certified AI Practitioner）的人做的学习网站「AIF-C01 学習ノート」。打开浏览器就能学，不用买实体书。第一版的界面是日语，中文版以后再考虑。
@@ -27,11 +29,11 @@ order: 2
 
 ## 现在的进度
 
-- 已完成：网站的整体结构和上面的各项功能，以及日语界面。
+- 已完成：网站的整体结构和上面的各项功能、日语界面，以及上线部署。
 - 进行中：条目解说、题目解析等日语正文（还没写好的部分先显示“准备中”，不用机器翻译填充）。
-- 尚未开始：对照考试指南的人工检查（目前所有内容的状态都是“未检查”）、上线部署、中文版。
+- 尚未开始：对照考试指南的人工检查（目前所有内容的状态都是“未检查”）、中文版。
 
-上线时间未定，上线后会在这里放链接。
+网站地址：<https://aif.koukenhou.com/>
 
 ## 说明
 

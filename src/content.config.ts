@@ -15,6 +15,8 @@ const works = defineCollection({
     order: z.number().int(),
     links: z
       .object({
+        // The live website, for works that run in the browser.
+        site: z.url().optional(),
         repo: z.url().optional(),
         download: z.url().optional(),
       })

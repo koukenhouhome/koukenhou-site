@@ -1,0 +1,50 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  links: CollectionEntry<'works'>['data']['links'];
+}
+
+const { links } = Astro.props;
+
+// Fixed order: the most useful action comes first.
+const items = [
+  { href: links?.site, label: '打开网站 →' },
+  { href: links?.download, label: '下载' },
+  { href: links?.repo, label: '源码' },
+].filter((item): item is { href: string; label: string } => Boolean(item.href));
+---
+
+{
+  items.length > 0 && (
+    <ul class="work-links">
+      {items.map((item) => (
+        <li>
+          <a href={item.href}>{item.label}</a>
+        </li>
+      ))}
+    </ul>
+  )
+}
+
+<style>
+  .work-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+    margin: 1rem 0 1.5rem;
+    padding: 0;
+    list-style: none;
+  }
+  .work-links a {
+    display: inline-block;
+    padding: 0.375rem 0.875rem;
+    border: 1px solid var(--accent);
+    border-radius: 0.375rem;
+    text-decoration: none;
+    font-weight: 600;
+  }
+  .work-links a:hover {
+    background: var(--hover);
+  }
+</style>
