@@ -1,3 +1,5 @@
+/* Light theme is the default. Dark applies when the system prefers it and the
+   visitor has not chosen light, or when the visitor explicitly chose dark. */
 :root {
   --bg: #fdfdfc;
   --fg: #1c1c1e;
@@ -5,18 +7,32 @@
   --accent: #2f5fd0;
   --border: #e4e4e7;
   --card: #ffffff;
-  color-scheme: light dark;
+  --hover: #f3f4f6;
+  color-scheme: light;
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme='light']) {
     --bg: #141416;
     --fg: #ececee;
     --muted: #a0a0a8;
     --accent: #8fb0ff;
     --border: #2c2c31;
     --card: #1c1c20;
+    --hover: #222227;
+    color-scheme: dark;
   }
+}
+
+:root[data-theme='dark'] {
+  --bg: #141416;
+  --fg: #ececee;
+  --muted: #a0a0a8;
+  --accent: #8fb0ff;
+  --border: #2c2c31;
+  --card: #1c1c20;
+  --hover: #222227;
+  color-scheme: dark;
 }
 
 * {
@@ -24,9 +40,7 @@
 }
 
 body {
-  margin: 0 auto;
-  max-width: 46rem;
-  padding: 0 1rem;
+  margin: 0;
   background: var(--bg);
   color: var(--fg);
   font-family: system-ui, -apple-system, 'Segoe UI', 'Microsoft YaHei', sans-serif;
@@ -37,17 +51,57 @@ a {
   color: var(--accent);
 }
 
+.container {
+  margin: 0 auto;
+  max-width: 64rem;
+  /* Only the sides: header, main and footer set their own vertical padding. */
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+main.narrow {
+  max-width: 44rem;
+}
+
 .site-header {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  padding: 1.25rem 0;
+  gap: 0.5rem 1rem;
+  padding-top: 1.25rem;
+  padding-bottom: 1.25rem;
   border-bottom: 1px solid var(--border);
+}
+
+.header-end {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 }
 
 .site-header nav {
   display: flex;
   gap: 1rem;
+}
+
+.site-header nav a {
+  color: var(--muted);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.site-header nav a:hover,
+.site-header nav a[aria-current='page'] {
+  color: var(--fg);
+}
+
+.site-header nav a[aria-current='page'] {
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-color: var(--accent);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.4em;
 }
 
 .brand {
@@ -56,17 +110,120 @@ a {
   text-decoration: none;
 }
 
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--fg);
+  cursor: pointer;
+}
+
+.theme-toggle:hover {
+  background: var(--hover);
+}
+
+.theme-toggle svg {
+  width: 1rem;
+  height: 1rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Show the icon of the theme the button switches to. Driven by CSS (not the
+   script) so the right icon is there on first paint. */
+.theme-toggle .icon-sun,
+:root[data-theme='dark'] .theme-toggle .icon-moon {
+  display: none;
+}
+
+:root[data-theme='dark'] .theme-toggle .icon-sun {
+  display: block;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) .theme-toggle .icon-moon {
+    display: none;
+  }
+
+  :root:not([data-theme]) .theme-toggle .icon-sun {
+    display: block;
+  }
+}
+
 main {
-  padding: 2rem 0;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
 }
 
 .site-footer {
-  padding: 1.5rem 0;
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
   border-top: 1px solid var(--border);
   color: var(--muted);
   font-size: 0.875rem;
 }
 
 .muted {
+  color: var(--muted);
+}
+
+/* Section heading with an optional "see all" link on the right. */
+.section-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.section-head h2 {
+  margin: 0 0 0.5rem;
+  font-size: 1.125rem;
+}
+
+.section-head a {
+  font-size: 0.875rem;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+/* Lists where each row is one clickable link. */
+.row-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.row-list > li {
+  border-bottom: 1px solid var(--border);
+}
+
+/* Long-form Markdown content (life posts, work pages). */
+.prose img {
+  max-width: 100%;
+  height: auto;
+}
+
+.prose pre {
+  overflow-x: auto;
+  padding: 0.75rem 1rem;
+  border-radius: 0.375rem;
+  background: var(--card);
+  border: 1px solid var(--border);
+}
+
+.prose blockquote {
+  margin: 1rem 0;
+  padding-left: 1rem;
+  border-left: 3px solid var(--border);
   color: var(--muted);
 }

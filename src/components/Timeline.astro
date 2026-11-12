@@ -1,0 +1,87 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { formatYearMonth, kindLabel } from '../lib/content';
+
+interface Props {
+  entries: CollectionEntry<'timeline'>[];
+}
+
+const { entries } = Astro.props;
+---
+
+<ol class="timeline">
+  {
+    entries.map(({ data }) => (
+      <li>
+        <p class="period">
+          {formatYearMonth(data.start)} – {data.end ? formatYearMonth(data.end) : '至今'}
+        </p>
+        <p class="what">
+          <span class:list={['kind', data.kind]}>{kindLabel[data.kind]}</span>
+          <strong>{data.org}</strong>
+          <span class="role">{data.role}</span>
+        </p>
+        {data.summary && <p class="summary">{data.summary}</p>}
+      </li>
+    ))
+  }
+</ol>
+
+<style>
+  .timeline {
+    margin: 1rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  li {
+    position: relative;
+    padding: 0 0 1.25rem 1.5rem;
+    border-left: 2px solid var(--border);
+    margin-left: 0.375rem;
+  }
+  li:last-child {
+    border-left-color: transparent;
+    padding-bottom: 0;
+  }
+  /* The dot on the axis. */
+  li::before {
+    content: '';
+    position: absolute;
+    left: -0.4375rem;
+    top: 0.375rem;
+    width: 0.75rem;
+    height: 0.75rem;
+    border-radius: 50%;
+    background: var(--bg);
+    border: 2px solid var(--accent);
+  }
+  p {
+    margin: 0;
+  }
+  .period {
+    color: var(--muted);
+    font-size: 0.875rem;
+    font-variant-numeric: tabular-nums;
+  }
+  .what {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.25rem 0.5rem;
+  }
+  .kind {
+    padding: 0 0.375rem;
+    border: 1px solid var(--border);
+    border-radius: 0.25rem;
+    font-size: 0.75rem;
+    color: var(--muted);
+  }
+  .kind.work {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .role,
+  .summary {
+    color: var(--muted);
+  }
+</style>
