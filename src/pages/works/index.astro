@@ -1,0 +1,22 @@
+---
+import WorkRow from '../../components/WorkRow.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getWorks } from '../../lib/content';
+
+const works = await getWorks();
+---
+
+<BaseLayout title="作品" description="个人开发者 Koukenhou 做的软件。" section="works">
+  <h1>作品</h1>
+  {
+    works.length > 0 ? (
+      <ul class="row-list">
+        {works.map((work) => (
+          <WorkRow work={work} />
+        ))}
+      </ul>
+    ) : (
+      <p class="muted">准备中。</p>
+    )
+  }
+</BaseLayout>

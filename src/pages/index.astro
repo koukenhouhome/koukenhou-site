@@ -1,29 +1,91 @@
 ---
-import { getCollection } from 'astro:content';
-import WorkCard from '../components/WorkCard.astro';
+import PostRow from '../components/PostRow.astro';
+import ProfileCard from '../components/ProfileCard.astro';
+import Timeline from '../components/Timeline.astro';
+import WorkRow from '../components/WorkRow.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { getLifePosts, getTimeline, getWorks } from '../lib/content';
+import { GITHUB_URL, SITE_NAME } from '../site';
 
-const works = (await getCollection('works')).sort((a, b) => a.data.order - b.data.order);
+const HOME_POST_LIMIT = 5;
+
+const works = await getWorks();
+const posts = (await getLifePosts()).slice(0, HOME_POST_LIMIT);
+const timeline = await getTimeline();
 ---
 
-<BaseLayout>
-  <section>
-    <h1>你好，我是 Koukenhou</h1>
-    <!-- TODO(owner): replace with your own one-line introduction. -->
-    <p>个人开发者。这里记录我做的软件和开发过程。</p>
-  </section>
-
-  <section>
-    <h2>作品</h2>
-    <div class="works">
-      {works.map((work) => <WorkCard work={work} />)}
+<BaseLayout section="home" width="wide">
+  <div class="home">
+    <div class="side">
+      <ProfileCard name={SITE_NAME} githubUrl={GITHUB_URL} />
     </div>
-  </section>
+
+    <div class="sections">
+      {
+        works.length > 0 && (
+          <section aria-labelledby="works-heading">
+            <div class="section-head">
+              <h2 id="works-heading">作品</h2>
+              <a href="/works/">全部作品 →</a>
+            </div>
+            <ul class="row-list">
+              {works.map((work) => (
+                <WorkRow work={work} />
+              ))}
+            </ul>
+          </section>
+        )
+      }
+
+      {
+        posts.length > 0 && (
+          <section aria-labelledby="life-heading">
+            <div class="section-head">
+              <h2 id="life-heading">生活</h2>
+              <a href="/life/">全部文章 →</a>
+            </div>
+            <ul class="row-list">
+              {posts.map((post) => (
+                <PostRow post={post} />
+              ))}
+            </ul>
+          </section>
+        )
+      }
+
+      {
+        timeline.length > 0 && (
+          <section aria-labelledby="timeline-heading">
+            <div class="section-head">
+              <h2 id="timeline-heading">经历</h2>
+            </div>
+            <Timeline entries={timeline} />
+          </section>
+        )
+      }
+    </div>
+  </div>
 </BaseLayout>
 
 <style>
-  .works {
+  .home {
     display: grid;
-    gap: 1rem;
+    gap: 2rem;
+  }
+  .sections {
+    display: grid;
+    gap: 2.5rem;
+    min-width: 0;
+  }
+  @media (min-width: 52rem) {
+    .home {
+      grid-template-columns: 15rem minmax(0, 1fr);
+      gap: 3rem;
+      align-items: start;
+    }
+    .side {
+      position: sticky;
+      top: 1.5rem;
+    }
   }
 </style>

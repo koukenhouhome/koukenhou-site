@@ -1,0 +1,22 @@
+---
+import PostRow from '../../components/PostRow.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getLifePosts } from '../../lib/content';
+
+const posts = await getLifePosts();
+---
+
+<BaseLayout title="生活" description="Koukenhou 的生活记录。" section="life">
+  <h1>生活</h1>
+  {
+    posts.length > 0 ? (
+      <ul class="row-list">
+        {posts.map((post) => (
+          <PostRow post={post} />
+        ))}
+      </ul>
+    ) : (
+      <p class="muted">准备中。</p>
+    )
+  }
+</BaseLayout>

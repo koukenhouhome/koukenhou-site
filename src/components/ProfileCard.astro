@@ -1,0 +1,69 @@
+---
+interface Props {
+  name: string;
+  githubUrl: string;
+}
+
+const { name, githubUrl } = Astro.props;
+---
+
+<aside class="profile" aria-label="个人简介">
+  <div class="avatar" aria-hidden="true">{name.charAt(0)}</div>
+  <div class="text">
+    <h1>{name}</h1>
+    <!-- TODO(owner): replace with your own one-line introduction. -->
+    <p class="intro">个人开发者。这里记录我做的软件和开发过程。</p>
+    <p class="links"><a href={githubUrl}>GitHub</a></p>
+  </div>
+</aside>
+
+<style>
+  .profile {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+  }
+  .avatar {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 4rem;
+    height: 4rem;
+    border-radius: 50%;
+    background: var(--accent);
+    color: var(--bg);
+    font-size: 1.75rem;
+    font-weight: 700;
+  }
+  h1 {
+    margin: 0;
+    font-size: 1.25rem;
+  }
+  p {
+    margin: 0.25rem 0 0;
+  }
+  .intro {
+    color: var(--muted);
+  }
+  .links {
+    font-size: 0.875rem;
+  }
+
+  /* Two-column layout: stack the card vertically in the left column. */
+  @media (min-width: 52rem) {
+    .profile {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 1.5rem 1rem;
+      border: 1px solid var(--border);
+      border-radius: 0.5rem;
+      background: var(--card);
+    }
+    .avatar {
+      width: 5.5rem;
+      height: 5.5rem;
+      font-size: 2.25rem;
+    }
+  }
+</style>
