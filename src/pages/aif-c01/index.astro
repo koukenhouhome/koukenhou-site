@@ -1,0 +1,19 @@
+---
+import { getEntry, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+// Fail the build instead of publishing an empty page if the entry is missing.
+const work = await getEntry('works', 'aif-c01');
+if (!work) {
+  throw new Error('Missing content entry: src/content/works/aif-c01.md');
+}
+const { Content } = await render(work);
+---
+
+<BaseLayout title={work.data.title} description={work.data.tagline} section="works">
+  <h1>{work.data.title}</h1>
+  <p class="muted">{work.data.tagline}</p>
+  <div class="prose">
+    <Content />
+  </div>
+</BaseLayout>
