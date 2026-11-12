@@ -1,0 +1,81 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { formatDate, getLifePosts, readingMinutes } from '../../lib/content';
+
+export const getStaticPaths = (async () => {
+  // Newest first: the item after a post is older, the one before it is newer.
+  const posts = await getLifePosts();
+  return posts.map((post, i) => ({
+    params: { id: post.id },
+    props: { post, older: posts[i + 1], newer: posts[i - 1] },
+  }));
+}) satisfies GetStaticPaths;
+
+const { post, older, newer } = Astro.props;
+const { Content } = await render(post);
+const date = formatDate(post.data.date);
+---
+
+<BaseLayout title={post.data.title} description={post.data.description} section="life">
+  <article>
+    <p class="back"><a href="/life/">← 返回生活</a></p>
+    <h1>{post.data.title}</h1>
+    <p class="meta muted">
+      <time datetime={date}>{date}</time> · 约 {readingMinutes(post.body)} 分钟
+    </p>
+    <div class="prose">
+      <Content />
+    </div>
+  </article>
+
+  {
+    (older || newer) && (
+      <nav class="pager" aria-label="上一篇和下一篇">
+        {older ? <a href={`/life/${older.id}/`}>← 上一篇：{older.data.title}</a> : <span />}
+        {newer && (
+          <a class="next" href={`/life/${newer.id}/`}>
+            下一篇：{newer.data.title} →
+          </a>
+        )}
+      </nav>
+    )
+  }
+</BaseLayout>
+
+<style>
+  .back {
+    margin: 0 0 1rem;
+    font-size: 0.875rem;
+  }
+  .back a {
+    text-decoration: none;
+  }
+  h1 {
+    margin: 0;
+  }
+  .meta {
+    margin: 0.25rem 0 0;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.875rem;
+  }
+  .pager {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.5rem 1rem;
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+    font-size: 0.875rem;
+  }
+  .pager a {
+    text-decoration: none;
+  }
+  .next {
+    margin-left: auto;
+    text-align: right;
+  }
+</style>

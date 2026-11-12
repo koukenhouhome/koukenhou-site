@@ -1,15 +1,33 @@
 ---
+import { GITHUB_URL, SITE_NAME } from '../site';
 import '../styles/global.css';
+
+type Section = 'home' | 'works' | 'life' | 'about';
 
 interface Props {
   title?: string;
   description?: string;
+  /** Highlights the matching navigation item. */
+  section?: Section;
+  /** `wide` for the two-column home page; `narrow` (default) for reading pages. */
+  width?: 'wide' | 'narrow';
 }
 
-const siteName = 'Koukenhou';
-const { title, description = '个人开发者 Koukenhou 的自我介绍和作品。' } = Astro.props;
-const pageTitle = title ? `${title} | ${siteName}` : siteName;
+const {
+  title,
+  description = '个人开发者 Koukenhou 的自我介绍和作品。',
+  section,
+  width = 'narrow',
+} = Astro.props;
+const pageTitle = title ? `${title} | ${SITE_NAME}` : SITE_NAME;
 const canonical = new URL(Astro.url.pathname, Astro.site);
+
+const navItems: { href: string; label: string; section: Section }[] = [
+  { href: '/', label: '首页', section: 'home' },
+  { href: '/works/', label: '作品', section: 'works' },
+  { href: '/life/', label: '生活', section: 'life' },
+  { href: '/about/', label: '关于', section: 'about' },
+];
 ---
 
 <!doctype html>
@@ -23,20 +41,69 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <meta name="description" content={description} />
     <meta name="generator" content={Astro.generator} />
     <title>{pageTitle}</title>
+    <!-- Apply a saved theme before first paint to avoid a light flash. -->
+    <script is:inline>
+      try {
+        const saved = localStorage.getItem('theme');
+        if (saved === 'light' || saved === 'dark') {
+          document.documentElement.dataset.theme = saved;
+        }
+      } catch {}
+    </script>
   </head>
   <body>
-    <header class="site-header">
-      <a class="brand" href="/">{siteName}</a>
-      <nav aria-label="主导航">
-        <a href="/">作品</a>
-        <a href="/about/">关于</a>
-      </nav>
+    <header class="site-header container">
+      <a class="brand" href="/">{SITE_NAME}</a>
+      <div class="header-end">
+        <nav aria-label="主导航">
+          {
+            navItems.map((item) => (
+              <a href={item.href} aria-current={item.section === section ? 'page' : undefined}>
+                {item.label}
+              </a>
+            ))
+          }
+        </nav>
+        <button class="theme-toggle" type="button" aria-label="切换深色模式" aria-pressed="false">
+          <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"></path>
+          </svg>
+          <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="12" r="4"></circle>
+            <path
+              d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"
+            ></path>
+          </svg>
+        </button>
+      </div>
     </header>
-    <main>
+    <main class:list={['container', width]}>
       <slot />
     </main>
-    <footer class="site-footer">
-      <p>© {new Date().getFullYear()} {siteName}</p>
+    <footer class="site-footer container">
+      <p>© {new Date().getFullYear()} {SITE_NAME} · <a href={GITHUB_URL}>GitHub</a></p>
     </footer>
+    <script>
+      const root = document.documentElement;
+      const button = document.querySelector<HTMLButtonElement>('.theme-toggle');
+      const systemDark = window.matchMedia('(prefers-color-scheme: dark)');
+
+      const isDark = () =>
+        root.dataset.theme ? root.dataset.theme === 'dark' : systemDark.matches;
+      const sync = () => button?.setAttribute('aria-pressed', String(isDark()));
+
+      button?.addEventListener('click', () => {
+        const next = isDark() ? 'light' : 'dark';
+        root.dataset.theme = next;
+        try {
+          localStorage.setItem('theme', next);
+        } catch {
+          // Storage can be blocked (private mode); the choice then lasts for this page only.
+        }
+        sync();
+      });
+      systemDark.addEventListener('change', sync);
+      sync();
+    </script>
   </body>
 </html>

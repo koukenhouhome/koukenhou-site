@@ -1,0 +1,45 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { statusLabel } from '../lib/content';
+
+interface Props {
+  work: CollectionEntry<'works'>;
+}
+
+const { work } = Astro.props;
+---
+
+<li>
+  <a class="row" href={`/${work.id}/`}>
+    <span class="title">{work.data.title}</span>
+    <span class="meta">{statusLabel[work.data.status]} · {work.data.platforms.join(' / ')}</span>
+    <span class="desc">{work.data.tagline}</span>
+  </a>
+</li>
+
+<style>
+  .row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 0.125rem 1rem;
+    padding: 0.875rem 0.5rem;
+    color: inherit;
+    text-decoration: none;
+  }
+  .row:hover {
+    background: var(--hover);
+  }
+  .title {
+    font-weight: 600;
+    color: var(--accent);
+  }
+  .meta {
+    color: var(--muted);
+    font-size: 0.875rem;
+    white-space: nowrap;
+  }
+  .desc {
+    grid-column: 1 / -1;
+    color: var(--muted);
+  }
+</style>
