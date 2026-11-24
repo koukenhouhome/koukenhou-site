@@ -227,3 +227,26 @@ main {
   border-left: 3px solid var(--border);
   color: var(--muted);
 }
+
+/* Tables (legal pages) never widen the page on phones: cells wrap, and anything that still
+   does not fit scrolls sideways inside the table. */
+.prose table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+  border-collapse: collapse;
+  font-size: 0.9375rem;
+}
+
+.prose th,
+.prose td {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--border);
+  text-align: left;
+  vertical-align: top;
+}
+
+.prose th {
+  background: var(--card);
+  white-space: nowrap;
+}

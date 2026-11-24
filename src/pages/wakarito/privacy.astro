@@ -1,0 +1,16 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+// Published copy of docs/legal/privacy-policy.md in the Wakarito repository; the app links
+// here, so this path must not change.
+import { Content } from '../../legal/wakarito-privacy.md';
+---
+
+<BaseLayout
+  title="Wakarito 隐私政策"
+  description="Wakarito 会处理哪些数据、保存在哪里、保存多久，以及怎样删除。"
+  section="works"
+>
+  <div class="prose">
+    <Content />
+  </div>
+</BaseLayout>

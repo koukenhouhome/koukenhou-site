@@ -1,0 +1,16 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+// Published copy of docs/legal/terms-of-service.md in the Wakarito repository; the app links
+// here, so this path must not change.
+import { Content } from '../../legal/wakarito-terms.md';
+---
+
+<BaseLayout
+  title="Wakarito 服务条款"
+  description="使用 Wakarito 应用和官方翻译服务的条款。"
+  section="works"
+>
+  <div class="prose">
+    <Content />
+  </div>
+</BaseLayout>
